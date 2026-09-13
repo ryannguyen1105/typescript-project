@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react"
+import agent from "./api/agent";
 
 function App() {
   const [products, setProducts] = useState<{name: string, price: number}[]>([]);
 
   useEffect(() => {
-    fetch('https://eloc-auth.onrender.com/users')
-    .then(response => response.json())
-    .then(data => setProducts(data))
-  }
-)
+    agent.Catalog.list()
+    .then((data) => {
+      console.log("data Go:", data);
+      setProducts(data);
+    })
+    .catch((error) => console.error("error call API:", error));
+  }, [])
 
 const addProduct = () => {
   setProducts(prevState => [...prevState, {name: 'Máy lọc nước' + (prevState.length + 1), price: (prevState.length * 100) + 100}])
@@ -27,4 +30,4 @@ const addProduct = () => {
   )
 }
 
-export default App
+export default App 
